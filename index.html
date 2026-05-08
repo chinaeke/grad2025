@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinaeke's Graduation — Special Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink:   #ff1493;
+  --cyan:   #00f0ff;
+  --yellow: #ffe600;
+  --green:  #39ff14;
+  --orange: #ff7800;
+  --purple: #9400ff;
+  --white:  #ffffff;
+  --bg:     #040423;
+  --card:   #06063a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow-x:hidden;cursor:crosshair;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.07) 3px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:9999;}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,80,180,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(0,80,180,.18) 1px,transparent 1px),linear-gradient(rgba(0,80,180,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,80,180,.05) 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px;pointer-events:none;z-index:0;}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.star{position:absolute;border-radius:50%;animation:twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s);}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:1;transform:scale(1.5);}}
+.wrapper{position:relative;z-index:1;max-width:960px;margin:0 auto;}
+
+/* TICKERS */
+.ticker{background:var(--cyan);padding:10px 0;overflow:hidden;white-space:nowrap;}
+.ticker-bottom{background:var(--pink);}
+.ticker-inner{display:inline-block;animation:scroll-left 20s linear infinite;font-family:'Press Start 2P',monospace;font-size:10px;color:#000020;padding-left:100%;}
+.ticker-bottom .ticker-inner{color:#fff8cc;}
+@keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* HEADER */
+.header{background:linear-gradient(180deg,#0a0050 0%,var(--bg) 100%);text-align:center;padding:36px 20px 0;border-bottom:4px solid var(--cyan);position:relative;overflow:hidden;}
+.header::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--pink);}
+.special-label{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--cyan);letter-spacing:3px;margin-bottom:14px;text-shadow:0 0 10px var(--cyan),0 0 30px var(--cyan);animation:glow-cyan 2s ease-in-out infinite;}
+@keyframes glow-cyan{0%,100%{text-shadow:0 0 8px var(--cyan),0 0 20px var(--cyan);}50%{text-shadow:0 0 20px var(--cyan),0 0 60px var(--cyan),0 0 100px var(--cyan);}}
+.title-name{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(44px,9.5vw,92px);color:var(--white);line-height:1;text-shadow:0 0 20px var(--pink),0 0 50px var(--pink),4px 4px 0 rgba(255,20,147,.35);opacity:0;transform:translateY(-30px);animation:rise .8s .2s forwards,flicker 7s 1s ease-in-out infinite;}
+.title-grad{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(32px,7vw,70px);color:var(--yellow);line-height:1.15;text-shadow:0 0 15px var(--yellow),0 0 45px var(--yellow),3px 3px 0 rgba(255,230,0,.3);margin-bottom:24px;opacity:0;transform:translateY(-20px);animation:rise .8s .45s forwards;}
+@keyframes rise{to{opacity:1;transform:translateY(0);}}
+@keyframes flicker{0%,18%,20%,22%,24%,53%,55%,100%{opacity:1;}19%,23%,54%{opacity:.6;}}
+.band{background:var(--pink);padding:12px 20px;text-align:center;font-family:'Press Start 2P',monospace;font-size:10px;color:#fff;letter-spacing:2px;opacity:0;animation:rise .8s .7s forwards;}
+
+/* PIXEL STAGE */
+.pixel-stage{position:relative;background:linear-gradient(180deg,#050535 0%,#0a0a60 60%,#0d0d20 100%);height:280px;overflow:hidden;border-bottom:3px solid var(--cyan);opacity:0;animation:rise .8s .9s forwards;}
+.score-display{position:absolute;top:14px;left:20px;font-family:'Press Start 2P',monospace;font-size:9px;color:var(--yellow);text-shadow:0 0 8px var(--yellow);line-height:2;}
+.hi-score{position:absolute;top:14px;right:20px;font-family:'Press Start 2P',monospace;font-size:9px;color:var(--cyan);text-shadow:0 0 8px var(--cyan);text-align:right;line-height:2;}
+.lives{position:absolute;top:50px;left:20px;font-family:'Press Start 2P',monospace;font-size:8px;color:var(--pink);text-shadow:0 0 8px var(--pink);}
+.ground{position:absolute;bottom:0;left:0;height:36px;width:200%;display:flex;align-items:flex-end;animation:scroll-ground 2.5s linear infinite;}
+@keyframes scroll-ground{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ground-tile{width:40px;height:36px;flex-shrink:0;image-rendering:pixelated;}
+
+/* Coins */
+.coin{position:absolute;width:16px;height:16px;image-rendering:pixelated;animation:coin-float var(--cd,3s) ease-in-out infinite var(--cdelay,0s),coin-drift 10s linear infinite var(--cdelay,0s);}
+@keyframes coin-float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(180deg);}}
+@keyframes coin-drift{from{left:110%;}to{left:-10%;}}
+
+/* Character */
+.character-wrap{position:absolute;bottom:36px;left:-80px;animation:walk-across 10s linear infinite;}
+@keyframes walk-across{0%{left:-80px;transform:scaleX(1);}44%{left:calc(100% + 20px);transform:scaleX(1);}44.1%{left:calc(100% + 20px);transform:scaleX(-1);}89%{left:-80px;transform:scaleX(-1);}89.1%{left:-80px;transform:scaleX(1);}100%{left:-80px;transform:scaleX(1);}}
+
+/* Speech bubble */
+.speech-bubble{position:absolute;bottom:86px;left:50%;transform:translateX(-50%);background:#fff;color:#000;font-family:'Press Start 2P',monospace;font-size:7px;padding:6px 10px;border-radius:3px;white-space:nowrap;opacity:0;animation:bubble-anim 10s linear infinite;pointer-events:none;border:2px solid var(--cyan);}
+.speech-bubble::after{content:'';position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#fff;}
+@keyframes bubble-anim{0%{opacity:0;}5%{opacity:0;}10%{opacity:1;}38%{opacity:1;}43%{opacity:0;}44.1%{opacity:0;}50%{opacity:1;}78%{opacity:1;}83%{opacity:0;}100%{opacity:0;}}
+
+/* Floating platforms */
+.platform{position:absolute;height:10px;image-rendering:pixelated;animation:platform-float 3s ease-in-out infinite;}
+@keyframes platform-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* SEPARATORS */
+.pixel-sep{display:flex;height:10px;margin:0;}
+.pixel-sep span:nth-child(odd){flex:1;background:var(--pink);}
+.pixel-sep span:nth-child(even){flex:1;background:var(--cyan);}
+.pixel-sep-2 span:nth-child(odd){flex:1;background:var(--green);}
+.pixel-sep-2 span:nth-child(even){flex:1;background:var(--yellow);}
+
+/* CEREMONY CARDS */
+.ceremonies{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:28px 24px 0;opacity:0;animation:rise .8s 1.1s forwards;}
+.ceremony-card{background:var(--card);padding:28px 20px;text-align:center;position:relative;transition:transform .3s,box-shadow .3s;}
+.ceremony-card:hover{transform:translateY(-5px);}
+.ceremony-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);pointer-events:none;}
+.ceremony-card:nth-child(1){border:3px solid var(--cyan);box-shadow:0 0 20px rgba(0,240,255,.25),inset 0 0 20px rgba(0,240,255,.05);}
+.ceremony-card:nth-child(2){border:3px solid var(--pink);box-shadow:0 0 20px rgba(255,20,147,.25),inset 0 0 20px rgba(255,20,147,.05);}
+.ceremony-card:nth-child(1):hover{box-shadow:0 0 40px rgba(0,240,255,.5),0 12px 30px rgba(0,240,255,.2);}
+.ceremony-card:nth-child(2):hover{box-shadow:0 0 40px rgba(255,20,147,.5),0 12px 30px rgba(255,20,147,.2);}
+.ceremony-label{font-family:'Press Start 2P',monospace;font-size:8px;margin-bottom:14px;}
+.ceremony-card:nth-child(1) .ceremony-label{color:var(--green);}
+.ceremony-card:nth-child(2) .ceremony-label{color:var(--yellow);}
+.ceremony-date{font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(20px,3.5vw,32px);color:var(--white);margin-bottom:10px;}
+.ceremony-time{font-family:'Press Start 2P',monospace;font-size:13px;}
+.ceremony-card:nth-child(1) .ceremony-time{color:var(--cyan);text-shadow:0 0 12px var(--cyan);}
+.ceremony-card:nth-child(2) .ceremony-time{color:var(--pink);text-shadow:0 0 12px var(--pink);}
+
+/* LOCATION CARDS */
+.locations{padding:20px 24px 0;display:flex;flex-direction:column;gap:16px;}
+.location-card{background:var(--card);padding:24px 20px;text-align:center;position:relative;transition:transform .3s;opacity:0;}
+.location-card:nth-child(1){animation:rise .8s 1.3s forwards;border:3px solid var(--orange);box-shadow:0 0 20px rgba(255,120,0,.2);}
+.location-card:nth-child(2){animation:rise .8s 1.5s forwards;border:3px solid var(--purple);box-shadow:0 0 20px rgba(148,0,255,.3);}
+.location-card:hover{transform:translateY(-4px);}
+.location-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);pointer-events:none;}
+.location-badge{display:inline-block;font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 12px;margin-bottom:12px;border-radius:2px;}
+.location-card:nth-child(1) .location-badge{background:var(--orange);color:#000;}
+.location-card:nth-child(2) .location-badge{background:var(--purple);color:#fff;}
+.location-tag{font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:1px;margin-bottom:10px;}
+.location-card:nth-child(1) .location-tag{color:var(--orange);text-shadow:0 0 10px var(--orange);}
+.location-card:nth-child(2) .location-tag{color:#cc88ff;text-shadow:0 0 10px #cc88ff;}
+.location-address{font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(13px,2.2vw,19px);color:var(--white);margin-bottom:6px;}
+.location-sub{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;}
+.location-card:nth-child(1) .location-sub{color:var(--cyan);}
+.location-card:nth-child(2) .location-sub{color:#cc88ff;}
+.location-note{margin-top:12px;font-family:'Press Start 2P',monospace;font-size:7px;color:var(--yellow);animation:glow-yellow 2s ease-in-out infinite;}
+@keyframes glow-yellow{0%,100%{text-shadow:0 0 6px var(--yellow);}50%{text-shadow:0 0 20px var(--yellow),0 0 50px var(--yellow);}}
+.location-icons{font-size:22px;margin-top:8px;letter-spacing:4px;}
+
+/* CONGRATS */
+.congrats{text-align:center;padding:40px 24px 16px;opacity:0;animation:rise .8s 1.7s forwards;}
+.congrats-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(24px,5vw,46px);color:var(--yellow);margin-bottom:14px;animation:glow-yellow 2.5s 2s ease-in-out infinite;}
+.congrats-msg{font-family:'Rajdhani',sans-serif;font-size:clamp(16px,2.5vw,20px);color:var(--yellow);font-weight:600;line-height:1.7;}
+
+/* INSERT COIN */
+.insert-coin{text-align:center;padding:18px 20px;font-family:'Press Start 2P',monospace;font-size:11px;color:var(--yellow);animation:blink 1s step-end infinite;letter-spacing:2px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+@media(max-width:600px){
+  .ceremonies{grid-template-columns:1fr;gap:14px;padding:16px 14px 0;}
+  .locations{padding:16px 14px 0;}
+  .pixel-stage{height:220px;}
+  .score-display,.hi-score,.lives{font-size:7px;}
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="stars" id="stars"></div>
+<div class="wrapper">
+
+  <!-- TOP TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">★ PRESS START ★ ACHIEVEMENT UNLOCKED: GRADUATION ★ NEW MILESTONE UNLOCKED ★ PRESS START ★ ACHIEVEMENT UNLOCKED: GRADUATION ★ NEW MILESTONE UNLOCKED ★&nbsp;&nbsp;&nbsp;★ PRESS START ★ ACHIEVEMENT UNLOCKED: GRADUATION ★ NEW MILESTONE UNLOCKED ★ PRESS START ★ ACHIEVEMENT UNLOCKED: GRADUATION ★ NEW MILESTONE UNLOCKED ★&nbsp;&nbsp;&nbsp;</div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="special-label">+ SPECIAL INVITATION FOR +</div>
+    <div class="title-name">CHINAEKE'S</div>
+    <div class="title-grad">GRADUATION</div>
+  </div>
+
+  <!-- BAND -->
+  <div class="band">★ &nbsp; CLASS OF 2025 &nbsp; ★ &nbsp; CSUN &nbsp; ★ &nbsp; INFORMATION SYSTEMS &nbsp; ★</div>
+
+  <!-- PIXEL STAGE -->
+  <div class="pixel-stage" id="stage">
+    <canvas id="stageCanvas" style="position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;" width="960" height="280"></canvas>
+    <div class="score-display">
+      <div>SCORE</div>
+      <div id="scoreVal">002025</div>
+    </div>
+    <div class="hi-score">
+      <div>HI-SCORE</div>
+      <div>GRADUATE</div>
+    </div>
+    <div class="lives">♥ ♥ ♥ &nbsp;CHINAEKE</div>
+    <div class="ground" id="ground"></div>
+    <div id="coins"></div>
+    <div class="character-wrap" id="charWrap">
+      <div class="speech-bubble" id="bubble">LVL UP! 🎓</div>
+      <canvas id="charCanvas" width="64" height="80" style="image-rendering:pixelated;display:block;"></canvas>
+    </div>
+  </div>
+
+  <!-- SEPARATOR -->
+  <div class="pixel-sep" id="sep1"></div>
+
+  <!-- CEREMONY CARDS -->
+  <div class="ceremonies">
+    <div class="ceremony-card">
+      <div class="ceremony-label">-- CEREMONY 1 --</div>
+      <div class="ceremony-date">MAY 15, 2025</div>
+      <div class="ceremony-time">10:00 AM</div>
+    </div>
+    <div class="ceremony-card">
+      <div class="ceremony-label">-- CEREMONY 2 --</div>
+      <div class="ceremony-date">MAY 16, 2025</div>
+      <div class="ceremony-time">8:00 AM</div>
+    </div>
+  </div>
+
+  <!-- LOCATIONS -->
+  <div class="locations">
+
+    <div class="location-card">
+      <div class="location-badge">BOTH DATES</div>
+      <div class="location-tag">🎓 CEREMONY LOCATION</div>
+      <div class="location-address">18111 Nordhoff St., Northridge, CA 91330</div>
+      <div class="location-sub">California State University, Northridge (CSUN)</div>
+    </div>
+
+    <div class="location-card">
+      <div class="location-badge">SAT MAY 17 ONLY</div>
+      <div class="location-tag">🎉 AFTER PARTY — POST CEREMONY</div>
+      <div class="location-address">12236 Vía Santa Lucía, Los Angeles, CA 91342</div>
+      <div class="location-sub">Meet up after the ceremony wraps!</div>
+      <div class="location-icons">🍔 🥂 🎵</div>
+      <div class="location-note">★ FOOD · DRINKS · VIBES ★</div>
+    </div>
+
+  </div>
+
+  <!-- CONGRATS -->
+  <div class="congrats">
+    <div class="congrats-title">** CONGRATULATIONS! **</div>
+    <div class="congrats-msg">
+      You are cordially invited to celebrate<br>this incredible achievement with us!
+    </div>
+  </div>
+
+  <!-- SEP 2 -->
+  <div class="pixel-sep pixel-sep-2" id="sep2"></div>
+
+  <!-- INSERT COIN -->
+  <div class="insert-coin">★ &nbsp; INSERT COIN TO CONTINUE &nbsp; ★</div>
+
+  <!-- BOTTOM TICKER -->
+  <div class="ticker ticker-bottom">
+    <div class="ticker-inner">★ GAME CLEAR ★ NEW HIGH SCORE ★ CONTINUE? ★ 1UP ★ GAME CLEAR ★ NEW HIGH SCORE ★ CONTINUE? ★ 1UP ★ GAME CLEAR ★ NEW HIGH SCORE ★ CONTINUE? ★ 1UP ★&nbsp;&nbsp;&nbsp;★ GAME CLEAR ★ NEW HIGH SCORE ★ CONTINUE? ★ 1UP ★ GAME CLEAR ★ NEW HIGH SCORE ★ CONTINUE? ★ 1UP ★ GAME CLEAR ★ NEW HIGH SCORE ★ CONTINUE? ★ 1UP ★&nbsp;&nbsp;&nbsp;</div>
+  </div>
+
+</div>
+<script>
+// ── BACKGROUND STARS ──────────────────────────────────────────────────────
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 180; i++) {
+  const s = document.createElement('div'); s.className='star';
+  const sz = Math.random()<.7?2:Math.random()<.5?3:4;
+  const cols=['#aaaaff','#ffffff','#ffaaff','#aaffff','#ffffaa'];
+  s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*70}%;background:${cols[Math.floor(Math.random()*cols.length)]};--dur:${2+Math.random()*4}s;--delay:${Math.random()*4}s;`;
+  starsEl.appendChild(s);
+}
+
+// ── SEPARATORS ─────────────────────────────────────────────────────────────
+['sep1','sep2'].forEach(id => {
+  const sep=document.getElementById(id);
+  for(let i=0;i<80;i++){const s=document.createElement('span');sep.appendChild(s);}
+});
+
+// ── GROUND TILES ──────────────────────────────────────────────────────────
+const ground=document.getElementById('ground');
+for(let i=0;i<52;i++){
+  const c=document.createElement('canvas');
+  c.width=40;c.height=36;c.className='ground-tile';
+  const g=c.getContext('2d');
+  g.fillStyle='#1a0a4a';g.fillRect(0,0,40,36);
+  g.fillStyle='#2a1a6a';
+  [[0,0,18,8],[20,0,18,8],[0,10,38,8],[0,20,8,8],[10,20,18,8],[30,20,8,8],[0,30,18,4],[20,30,18,4]].forEach(([x,y,w,h])=>g.fillRect(x,y,w,h));
+  g.fillStyle='#3a2a8a';
+  [[2,2,14,4],[22,2,14,4],[2,12,34,4],[2,22,4,4],[12,22,14,4],[32,22,4,4]].forEach(([x,y,w,h])=>g.fillRect(x,y,w,h));
+  g.fillStyle='#00f0ff';g.fillRect(0,0,40,2);
+  ground.appendChild(c);
+}
+
+// ── COINS ─────────────────────────────────────────────────────────────────
+const coinsEl=document.getElementById('coins');
+[['#ffe600',80],['#00f0ff',110],['#ff1493',95],['#39ff14',120],['#ff7800',75]].forEach(([col,bottom],i)=>{
+  const c=document.createElement('canvas');c.width=16;c.height=16;c.className='coin';
+  const cx=c.getContext('2d');
+  cx.fillStyle=col;
+  cx.fillRect(4,0,8,2);cx.fillRect(2,2,12,2);cx.fillRect(0,4,16,8);cx.fillRect(2,12,12,2);cx.fillRect(4,14,8,2);
+  cx.fillStyle='rgba(255,255,255,0.5)';cx.fillRect(5,4,3,4);
+  c.style.cssText=`bottom:${bottom}px;--cd:${1.8+i*.4}s;--cdelay:${-i*2}s;`;
+  coinsEl.appendChild(c);
+});
+
+// ── STAGE BACKGROUND CANVAS (stars + floating elements) ───────────────────
+const sc=document.getElementById('stageCanvas');
+const sctx=sc.getContext('2d');
+const sStars=[];
+for(let i=0;i<70;i++) sStars.push({x:Math.random()*960,y:Math.random()*220,r:Math.random()<.7?1:2,phase:Math.random()*Math.PI*2,speed:.008+Math.random()*.012});
+
+// ── PIXEL CHARACTER ───────────────────────────────────────────────────────
+const cc=document.getElementById('charCanvas');
+const ctx=cc.getContext('2d');
+ctx.imageSmoothingEnabled=false;
+const P=8;
+
+const C={
+  skin:'#c8865a', hair:'#1a0800', shirt:'#ff1493',
+  pants:'#1a1a6a', shoes:'#111', white:'#ffffff',
+  cap:'#111122', gold:'#ffe600', tassel:'#ff7800',
+  accent:'#00f0ff'
+};
+
+function px(col,row,color){ctx.fillStyle=color;ctx.fillRect(col*P,row*P,P,P);}
+
+function drawChar(frame){
+  ctx.clearRect(0,0,64,80);
+  // Cap brim (row -1 treated as row 0 top)
+  [0,1,2,3,4,5,6,7].forEach(c=>px(c,0,C.cap));
+  // Cap top
+  [1,2,3,4,5,6].forEach(c=>px(c,1,C.cap));
+  // Tassel
+  px(7,0,C.tassel); px(7,1,C.tassel);
+  // Head
+  [[2,2],[3,2],[4,2],[5,2],
+   [1,3],[2,3],[3,3],[4,3],[5,3],[6,3],
+   [1,4],[2,4],[3,4],[4,4],[5,4],[6,4],
+   [2,5],[3,5],[4,5],[5,5]
+  ].forEach(([c,r])=>px(c,r,C.skin));
+  // Eyes
+  px(2,4,'#222'); px(5,4,'#222');
+  // Smile
+  px(3,5,'#8b4513'); px(4,5,'#8b4513');
+  // Neck
+  px(3,6,C.skin); px(4,6,C.skin);
+  // Body
+  [[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],[7,6],
+   [1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],
+   [2,8],[3,8],[4,8],[5,8],[6,8]
+  ].forEach(([c,r])=>px(c,r,C.shirt));
+  // Diploma
+  px(7,7,C.gold); px(7,8,C.white); px(7,6,C.accent);
+  // Arms
+  px(0,6,C.skin); px(0,7,C.skin);
+  px(7,6,C.skin);
+
+  // Legs — alternating walk
+  if(frame===0){
+    // Step A: left fwd, right back
+    [[2,9],[3,9],[5,9],[6,9]].forEach(([c,r])=>px(c,r,C.pants));
+    [[2,10],[3,10],[5,10],[6,10]].forEach(([c,r])=>px(c,r,C.pants));
+    [1,2,3].forEach(c=>px(c,11,C.shoes));
+    [5,6,7].forEach(c=>px(c,11,C.shoes));
+  } else {
+    // Step B: right fwd, left back
+    [[2,9],[3,9],[5,9],[6,9]].forEach(([c,r])=>px(c,r,C.pants));
+    [[2,10],[4,10],[5,10],[6,10]].forEach(([c,r])=>px(c,r,C.pants));
+    [1,2,3].forEach(c=>px(c,11,C.shoes));
+    [4,5,6].forEach(c=>px(c,11,C.shoes));
+  }
+}
+
+// ── SCORE ─────────────────────────────────────────────────────────────────
+let score=2025;
+const scoreVal=document.getElementById('scoreVal');
+setInterval(()=>{score+=Math.floor(Math.random()*15+5);scoreVal.textContent=String(score).padStart(6,'0');},100);
+
+// ── SPEECH BUBBLE ROTATION ────────────────────────────────────────────────
+const msgs=['LVL UP! 🎓','GAME CLEAR!','DIPLOMA GET!','1UP! 🎉','NEW HIGH SCORE!','CONGRATS! 🏆'];
+let msgIdx=0;
+const bubble=document.getElementById('bubble');
+setInterval(()=>{msgIdx=(msgIdx+1)%msgs.length;bubble.textContent=msgs[msgIdx];},10000);
+
+// ── MAIN LOOP ─────────────────────────────────────────────────────────────
+let frame=0, lastSwitch=0;
+
+function loop(ts){
+  // Walk cycle
+  if(ts-lastSwitch>140){
+    frame=frame===0?1:0;
+    lastSwitch=ts;
+    drawChar(frame);
+  }
+  // Stage stars
+  sctx.clearRect(0,0,960,280);
+  const t=ts/1000;
+  sStars.forEach(s=>{
+    const opacity=0.2+0.8*(0.5+0.5*Math.sin(t*s.speed*60+s.phase));
+    sctx.globalAlpha=opacity;
+    sctx.fillStyle='#ffffff';
+    sctx.fillRect(s.x,s.y,s.r,s.r);
+  });
+  sctx.globalAlpha=1;
+  requestAnimationFrame(loop);
+}
+
+drawChar(0);
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
